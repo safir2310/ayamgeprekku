@@ -1,0 +1,253 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Admin Model
+model Admin {
+  id          String    @id @default(cuid())
+  userId      String    @unique // 4 digit ID
+  username    String    @unique
+  password    String
+  email       String    @unique
+  noHp        String
+  kodeVerifikasi String?     // 6 digit verification code for forgot password
+  tanggalLahir DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  products           Produk[]
+  productsPoint      ProdukPoint[]
+  redeemCodes        RedeemCode[]
+  users              User[]
+  transactions       Transaksi[]
+}
+
+// User Model
+model User {
+  id          String      @id @default(cuid())
+  userId      String      @unique // 4 digit ID
+  username    String      @unique
+  password    String
+  email       String      @unique
+  noHp        String
+  kodeVerifikasi String?     // 6 digit verification code for forgot password
+  photo       String?
+  alamat      String?
+  tanggalLahir DateTime?
+  role        String      @default("user") // user or admin
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  walletSaldo      WalletSaldo?
+  walletHistory    WalletHistory[]
+  redeemHistory    RedeemHistory[]
+  cartItems        CartItem[]
+  transactions     Transaksi[]
+  struks           Struk[]
+  referralCode     String?     @unique
+
+  // Member Level
+  memberLevel      String      @default("Silver") // Silver, Gold, Platinum
+  totalSpent       Float       @default(0)
+  referralFrom     String?     // Referrer user ID
+  referrals        User[]      @relation("ReferralRelation")
+  referredBy       User?       @relation("ReferralRelation", fields: [referralFrom], references: [id])
+
+  adminId         String?
+  admin           Admin?      @relation(fields: [adminId], references: [id])
+}
+
+// Produk Model (Food, Drinks, Promo, Discount, New Products)
+model Produk {
+  id          String    @id @default(cuid())
+  nama        String
+  deskripsi   String?
+  harga       Float
+  kategori    String    // makanan, minuman, promo, diskon, terbaru
+  gambar      String?
+  promo       Boolean   @default(false)
+  diskon      Float?    @default(0) // Percentage
+  isAvailable Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  cartItems     CartItem[]
+  transaksiItem TransaksiItem[]
+  adminId       String
+  admin         Admin    @relation(fields: [adminId], references: [id])
+}
+
+// Produk Point Model (Products redeemable with points)
+model ProdukPoint {
+  id          String    @id @default(cuid())
+  nama        String
+  deskripsi   String?
+  poin        Int       // Points required
+  gambar      String?
+  isAvailable Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  redeemHistory RedeemHistory[]
+  adminId       String
+  admin         Admin    @relation(fields: [adminId], references: [id])
+}
+
+// Redeem Code Model
+model RedeemCode {
+  id          String    @id @default(cuid())
+  kode        String    @unique
+  poin        Int
+  aktif       Boolean   @default(true)
+  expired     Boolean   @default(false)
+  expiredAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  redeemHistory RedeemHistory[]
+  adminId       String
+  admin         Admin    @relation(fields: [adminId], references: [id])
+}
+
+// Redeem History Model
+model RedeemHistory {
+  id          String    @id @default(cuid())
+  userId      String
+  redeemCodeId String?
+  poin        Int
+  deskripsi   String
+  createdAt   DateTime  @default(now())
+
+  user          User          @relation(fields: [userId], references: [id])
+  redeemCode    RedeemCode?   @relation(fields: [redeemCodeId], references: [id])
+  produkPointId String?
+  produkPoint   ProdukPoint?  @relation(fields: [produkPointId], references: [id])
+}
+
+// Wallet Saldo Model
+model WalletSaldo {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  saldo       Float    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// Wallet History Model
+model WalletHistory {
+  id          String    @id @default(cuid())
+  userId      String
+  tipe        String    // credit, debit
+  jumlah      Float
+  deskripsi   String
+  saldoSebelum Float
+  saldoSesudah Float
+  createdAt   DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// Cart Item Model
+model CartItem {
+  id        String    @id @default(cuid())
+  userId    String
+  produkId  String
+  jumlah    Int       @default(1)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id])
+  produk  Produk  @relation(fields: [produkId], references: [id])
+}
+
+// Transaksi Model (Orders)
+model Transaksi {
+  id          String    @id @default(cuid())
+  strukId     String    @unique // 4 digit ID
+  userId      String
+  total       Float
+  saldoDipakai Float    @default(0)
+  diskonPoint Float     @default(0)
+  sisaSaldo   Float     @default(0)
+  status      String    @default("Menunggu") // Menunggu, Diproses, Selesai, Cancel
+  nama        String
+  alamat      String
+  noHp        String
+  catatan     String?
+  cashback    Float?    @default(0) // Automatic cashback
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user            User             @relation(fields: [userId], references: [id])
+  transaksiItem   TransaksiItem[]
+  struk           Struk?
+  adminId         String?
+  admin           Admin?           @relation(fields: [adminId], references: [id])
+}
+
+// Transaksi Item Model
+model TransaksiItem {
+  id          String    @id @default(cuid())
+  transaksiId String
+  produkId    String
+  jumlah      Int
+  harga       Float
+  subtotal    Float
+  createdAt   DateTime  @default(now())
+
+  transaksi Transaksi @relation(fields: [transaksiId], references: [id], onDelete: Cascade)
+  produk    Produk    @relation(fields: [produkId], references: [id])
+}
+
+// Struk Model (Receipt)
+model Struk {
+  id            String    @id @default(cuid())
+  strukId       String    @unique // 4 digit ID
+  transaksiId   String    @unique
+  userId        String
+  total         Float
+  saldoDipakai  Float     @default(0)
+  diskonPoint   Float     @default(0)
+  sisaSaldo     Float     @default(0)
+  status        String    // Menunggu, Diproses, Selesai, Cancel
+  createdAt     DateTime  @default(now())
+
+  transaksi Transaksi @relation(fields: [transaksiId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
+}
+
+// Profile Toko Model
+model ProfileToko {
+  id          String   @id @default(cuid())
+  nama        String   @default("AYAM GEPREK SAMBAL IJO")
+  slogan      String   @default("Pedasnya Bikin Nagih 🔥🔥")
+  alamat      String   @default("Jl. Medan - Banda Aceh, Simpang Camat, Gampong Tijue, Kec. Pidie, Kab. Pidie, 24151")
+  noHp        String   @default("085260812758")
+  instagram   String?
+  facebook    String?
+  pointValue  Float    @default(100) // 1 Point = Rp 100
+  minSaldoUse Float    @default(0) // Minimum saldo usage
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Wallet Settings (Additional settings for wallet system)
+model WalletSettings {
+  id            String   @id @default(cuid())
+  pointValue    Float    @default(100) // 1 Point = Rp X
+  minSaldoUse   Float    @default(0) // Minimum saldo that can be used
+  cashbackRate  Float    @default(0) // Cashback percentage
+  referralRate  Float    @default(0) // Referral point reward
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

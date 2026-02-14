@@ -1,0 +1,312 @@
+╔════════════════════════════════════════════════════════════════╗
+║           DEPLOYMENT QUICK REFERENCE - AYAM GEPREK              ║
+╚════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ 🚀 DEPLOYMENT OPTIONS                                           │
+└──────────────────────────────────────────────────────────────────────┘
+
+Option 1: Script Otomatis (RECOMMENDED) ⭐
+─────────────────────────────────────────────────────────
+Command: bash deploy-vercel.sh
+
+✅ Cepat (5 menit)
+✅ Otomatis add env vars
+✅ Otomatis generate NEXTAUTH_SECRET
+✅ Satu command deploy
+
+Requirements:
+  - Vercel CLI installed
+  - Logged in to Vercel
+
+
+Option 2: Manual via Vercel Dashboard
+─────────────────────────────────────────────────────────
+Steps:
+  1. Buka https://vercel.com/new
+  2. Import repository: safir2310/ayamgeprekku
+  3. Add environment variables (lihat di bawah)
+  4. Deploy
+
+✅ Lebih kontrol
+✅ Tidak perlu CLI
+❌ Lebih manual
+
+Requirements:
+  - Vercel account
+  - GitHub repository connected
+
+
+Option 3: Manual Script Guide
+─────────────────────────────────────────────────────────
+Command: bash deploy-manual.sh
+
+✅ Step-by-step guide
+✅ Interactive prompts
+❌ Lebih lambat
+
+Requirements:
+  - Vercel CLI installed
+  - Logged in to Vercel
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ 📋 ENVIRONMENT VARIABLES (Copy from .env file)                  │
+└──────────────────────────────────────────────────────────────────────┘
+
+POSTGRES_PRISMA_URL (Production, Preview, Development)
+────────────────────────────────────────────────────────────────────
+postgres://df1f6bb92f9f575ea1d870a67fb2c19f2b50cd9dfb9056cb1561c2f46c721122:sk_OxeMNEvg4SxBP76Kwv6zt@db.prisma.io:5432/postgres?sslmode=require&pgbouncer=true&connect_timeout=15
+
+
+POSTGRES_URL_NON_POOLING (Production, Preview, Development)
+────────────────────────────────────────────────────────────────────
+postgres://df1f6bb92f9f575ea1d870a67fb2c19f2b50cd9dfb9056cb1561c2f46c721122:sk_OxeMNEvg4SxBP76Kwv6zt@db.prisma.io:5432/postgres?sslmode=require
+
+
+POSTGRES_URL (Production, Preview, Development)
+────────────────────────────────────────────────────────────────────
+postgres://df1f6bb92f9f575ea1d870a67fb2c19f2b50cd9dfb9056cb1561c2f46c721122:sk_OxeMNEvg4SxBP76Kwv6zt@db.prisma.io:5432/postgres?sslmode=require&pgbouncer=true
+
+
+NEXTAUTH_SECRET (Production, Preview, Development)
+────────────────────────────────────────────────────────────────────
+Generate baru: openssl rand -base64 32
+
+ATAU gunakan: https://generate-secret.vercel.app/32
+
+DON'T use: ayamgeprek-secret-key-change-in-production-2024
+
+
+NEXTAUTH_URL (Production)
+────────────────────────────────────────────────────────────────────
+Kosong dulu, isi setelah deploy:
+  https://your-deployment-url.vercel.app
+
+Contoh: https://ayamgeprekku.vercel.app
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ ✅ DEPLOYMENT CHECKLIST                                          │
+└──────────────────────────────────────────────────────────────────────┘
+
+Before Deployment
+────────────────────────────────────
+☐ Vercel CLI installed
+☐ Logged in to Vercel
+☐ Repository pushed to GitHub
+☐ Database connection working (Prisma Cloud)
+☐ Environment variables ready
+
+Environment Variables in Vercel
+────────────────────────────────────
+☐ POSTGRES_PRISMA_URL added
+☐ POSTGRES_URL_NON_POOLING added
+☐ POSTGRES_URL added
+☐ NEXTAUTH_SECRET generated and added
+☐ NEXTAUTH_URL set (after deployment)
+
+After Deployment
+────────────────────────────────────
+☐ Deployment successful (green check)
+☐ App accessible at production URL
+☐ User registration/login working
+☐ Database connected (test register user)
+☐ All features working (products, orders, points)
+☐ No errors in function logs
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ 🧪 TESTING CHECKLIST                                            │
+└──────────────────────────────────────────────────────────────────────┘
+
+User Features
+───────────────
+☐ Register new user
+☐ Login with user
+☐ View products
+☐ Add to cart
+☐ Create order
+☐ View orders history
+☐ Check wallet balance
+☐ Redeem points
+
+Admin Features
+───────────────
+☐ Register admin
+☐ Login as admin
+☐ Add product
+☐ Edit product
+☐ Delete product
+☐ View orders
+☐ Update order status
+☐ Manage point products
+☐ View point redemption history
+
+General
+────────
+☐ Responsive design works
+☐ Dark/light mode works
+☐ Navigation works
+☐ All pages load without errors
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ 🔧 TROUBLESHOOTING                                                │
+└──────────────────────────────────────────────────────────────────────┘
+
+Problem: Deployment fails
+───────────────────────────
+Solution:
+  • Check build logs in Vercel Dashboard
+  • Verify all dependencies are in package.json
+  • Ensure prisma generate runs in build (check postinstall script)
+
+
+Problem: Database connection error
+───────────────────────────────────
+Solution:
+  • Verify all POSTGRES_ variables are correct
+  • Check database is active in Prisma Cloud
+  • Ensure SSL is enabled (sslmode=require)
+
+
+Problem: Auth not working
+───────────────────────────
+Solution:
+  • Check NEXTAUTH_SECRET is set
+  • Verify NEXTAUTH_URL matches deployment URL
+  • Use HTTPS for NEXTAUTH_URL
+
+
+Problem: Features not working
+───────────────────────────────
+Solution:
+  • Check function logs in Vercel Dashboard
+  • Verify database queries are successful
+  • Ensure Prisma Client is generated
+  • Check for runtime errors
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ 📊 MONITORING                                                       │
+└──────────────────────────────────────────────────────────────────────┘
+
+Vercel Dashboard
+───────────────
+• Deployments: View deployment history
+• Analytics: Traffic and performance metrics
+• Logs: Build logs and function logs
+• Settings: Environment variables and config
+
+Prisma Cloud Dashboard
+─────────────────────
+• Database metrics: Query performance
+• Database usage: Storage and query limits
+• Connection pool: Connection status
+
+Prisma Studio
+──────────────
+• Command: bunx prisma studio
+• Opens: http://localhost:5555
+• Use: View and manage database data
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ 🔄 UPDATES AND MAINTENANCE                                       │
+└──────────────────────────────────────────────────────────────────────┘
+
+Update Code
+───────────
+  git add .
+  git commit -m "feat: your changes"
+  git push origin master
+  # Vercel auto-deploys
+
+Update Schema
+────────────
+  # 1. Edit prisma/schema.prisma
+  # 2. Create migration
+  bun run db:migrate --name your_changes
+
+  # 3. Push to GitHub
+  git add prisma/migrations
+  git commit -m "db: add migration"
+  git push origin master
+
+Update Environment Variables
+───────────────────────────
+  1. Go to Vercel Dashboard
+  2. Settings → Environment Variables
+  3. Edit or add variable
+  4. Save and Redeploy
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ 📚 DOCUMENTATION                                                  │
+└──────────────────────────────────────────────────────────────────────┘
+
+Files in Project
+────────────────
+• DEPLOYMENT_GUIDE.md    - Detailed deployment guide
+• DEPLOYMENT.md          - Complete deployment documentation
+• VERCEL_SETUP.md        - Vercel setup guide
+• DATABASE_CONNECTION_INFO.md - Database setup info
+• OPSI_VERCEL_POSTGRES.md - Migrasi ke Vercel Postgres
+• deploy-vercel.sh       - Otomatis deployment script
+• deploy-manual.sh       - Manual deployment guide
+• prisma/postgres.md     - Postgres setup instructions
+
+Online Resources
+───────────────
+• Vercel Docs: https://vercel.com/docs
+• Prisma Docs: https://www.prisma.io/docs
+• NextAuth Docs: https://next-auth.js.org/docs
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ 🎯 QUICK COMMANDS                                                 │
+└──────────────────────────────────────────────────────────────────────┘
+
+Development
+────────────
+bun run dev              # Start development server
+bun run build            # Build for production
+bun run lint             # Check code quality
+
+Database
+────────
+bun run db:generate      # Generate Prisma Client
+bun run db:push         # Push schema to database
+bun run db:migrate      # Create migration
+bun run db:reset        # Reset database (CAUTION!)
+bunx prisma studio      # Open database viewer
+
+Deployment
+──────────
+vercel login            # Login to Vercel
+vercel link             # Link project
+vercel --prod           # Deploy to production
+bash deploy-vercel.sh    # Otomatis deployment
+bash deploy-manual.sh    # Manual guide
+
+Testing
+───────
+bun run lint            # Check for errors
+bunx prisma studio      # Check database data
+
+
+╔════════════════════════════════════════════════════════════════╗
+║                      READY TO DEPLOY? 🚀                              ║
+╚════════════════════════════════════════════════════════════════╝
+
+Quickest Way:
+  bash deploy-vercel.sh
+
+Or Use Vercel Dashboard:
+  https://vercel.com/new
+
+Need Help?
+  Read DEPLOYMENT_GUIDE.md for detailed instructions.
+
+Good Luck! 🎉
