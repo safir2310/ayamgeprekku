@@ -1,0 +1,49 @@
+══════════════════════════════════════════════════════════════════════════════
+          VERCEL ENVIRONMENT VARIABLES - COPY & PASTE
+          Project: ayamgeprekku
+══════════════════════════════════════════════════════════════════════════════
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. DATABASE_URL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Name: DATABASE_URL
+Environments: Production, Preview, Development
+Type: Plain
+
+Value:
+postgresql://postgres.eteuxazhlfpxavxwcztg:aYAGEPREKKU@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true&sslmode=require
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. NEXTAUTH_SECRET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Name: NEXTAUTH_SECRET
+Environments: Production, Preview, Development
+Type: Encrypted
+
+Value:
+j+GaOQzGbkcxbnoQEkCTVrHxP/YcD54cqNnC6h+5InY=
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. NEXTAUTH_URL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Name: NEXTAUTH_URL
+Environments: Production only
+Type: Plain
+
+Value:
+https://ayamgeprekku.vercel.app
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️  DELETE FIRST (if exists):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ POSTGRES_PRISMA_URL
+❌ POSTGRES_URL
+❌ POSTGRES_URL_NON_POOLING
+❌ PRISMA_ACCELERATE_URL
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
